@@ -1,0 +1,59 @@
+# GitHub Pages Configuration
+
+# Site settings
+title: "Áudio para Igrejas"
+description: "Blog especializado em áudio para igrejas - equipamentos, técnicas e dicas para melhorar o som do seu ministério"
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+permalink: pretty
+
+# Exclude from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Include files
+include:
+  - _pages
+
+# Collections
+collections:
+  articles:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "articles"
+    values:
+      layout: "article"
+      author: "Áudio para Igrejas"
+
+# SEO settings
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Social media
+social:
+  facebook: audioparaigrejas
+  instagram: audioparaigrejas
+  youtube: audioparaigrejas
+
+# Contact
+email: contato@audioparaigrejas.com
+phone: "(11) 99999-9999"
+
