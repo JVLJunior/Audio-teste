@@ -25,7 +25,7 @@ const sampleArticles = [
         category: "Tutorial",
         date: "2025-06-11",
         readTime: "8 min",
-        image: "", // "images/introducao-audio-basico.jpg",
+        image: "images/introducao.jpg",
         slug: "introducao-audio-basico"
     },
     {
