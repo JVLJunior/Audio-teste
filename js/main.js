@@ -6,7 +6,7 @@ const BlogConfig = {
     articles: []
 };
 
-// Dados de exemplo para demonstração (serão substituídos pelos artigos reais)
+// Dados de exemplo para demonstração (corrigidos)
 const sampleArticles = [
     {
         id: 1,
@@ -15,7 +15,7 @@ const sampleArticles = [
         category: "Equipamentos",
         date: "2024-06-10",
         readTime: "8 min",
-        image: "images/microphones-guide.jpg",
+        image: "", // Removido para usar placeholder
         slug: "guia-completo-microfones-igreja"
     },
     {
@@ -25,7 +25,7 @@ const sampleArticles = [
         category: "Tutorial",
         date: "2024-06-08",
         readTime: "12 min",
-        image: "images/sound-system-setup.jpg",
+        image: "", // Removido para usar placeholder
         slug: "configurar-sistema-som-basico"
     },
     {
@@ -35,14 +35,18 @@ const sampleArticles = [
         category: "Técnicas",
         date: "2024-06-05",
         readTime: "10 min",
-        image: "images/live-mixing-tips.jpg",
+        image: "", // Removido para usar placeholder
         slug: "mixagem-ao-vivo-dicas-essenciais"
     }
 ];
 
 // Inicialização quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', function() {
-    initializeApp();
+    try {
+        initializeApp();
+    } catch (error) {
+        console.error('Erro na inicialização:', error);
+    }
 });
 
 // Função principal de inicialização
@@ -104,228 +108,95 @@ function setupScrollEffects() {
 
 // Carregamento e exibição de artigos
 function loadArticles() {
-    // Por enquanto, usar artigos de exemplo
-    // Em produção, isso seria substituído por uma chamada à API ou carregamento de arquivos JSON
-    BlogConfig.articles = [...sampleArticles];
-    BlogConfig.totalArticles = BlogConfig.articles.length;
-    
-    displayArticles();
-    updateLoadMoreButton();
+    try {
+        BlogConfig.articles = [...sampleArticles];
+        BlogConfig.totalArticles = BlogConfig.articles.length;
+        
+        displayArticles();
+        updateLoadMoreButton();
+    } catch (error) {
+        console.error('Erro ao carregar artigos:', error);
+    }
 }
 
-// Exibir artigos na página
+// Exibir artigos na página (versão simplificada)
 function displayArticles() {
     const articlesGrid = document.getElementById('articlesGrid');
     const placeholder = document.querySelector('.article-placeholder');
     
-    if (!articlesGrid) return;
-
-    // Remover placeholder se houver artigos
-    if (BlogConfig.articles.length > 0 && placeholder) {
-        placeholder.style.display = 'none';
+    if (!articlesGrid) {
+        console.error('Element articlesGrid not found');
+        return;
     }
 
-    // Calcular artigos para exibir
-    const startIndex = 0;
-    const endIndex = BlogConfig.currentPage * BlogConfig.articlesPerPage;
-    const articlesToShow = BlogConfig.articles.slice(startIndex, endIndex);
+    try {
+        // Remover placeholder se houver artigos
+        if (BlogConfig.articles.length > 0 && placeholder) {
+            placeholder.style.display = 'none';
+        }
 
-    // Limpar grid (exceto placeholder)
-    const existingCards = articlesGrid.querySelectorAll('.article-card');
-    existingCards.forEach(card => card.remove());
+        // Calcular artigos para exibir
+        const startIndex = 0;
+        const endIndex = BlogConfig.currentPage * BlogConfig.articlesPerPage;
+        const articlesToShow = BlogConfig.articles.slice(startIndex, endIndex);
 
-    // Adicionar artigos
-    articlesToShow.forEach(article => {
-        const articleCard = createArticleCard(article);
-        articlesGrid.appendChild(articleCard);
-    });
+        // Limpar grid (exceto placeholder)
+        const existingCards = articlesGrid.querySelectorAll('.article-card');
+        existingCards.forEach(card => card.remove());
 
-    // Adicionar animação aos novos cards
-    setTimeout(() => {
-        const newCards = articlesGrid.querySelectorAll('.article-card');
-        newCards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.add('fade-in-up');
-            }, index * 100);
+        // Adicionar artigos
+        articlesToShow.forEach((article, index) => {
+            const articleCard = createArticleCard(article);
+            if (articleCard) {
+                articlesGrid.appendChild(articleCard);
+            }
         });
-    }, 100);
+
+    } catch (error) {
+        console.error('Erro ao exibir artigos:', error);
+    }
 }
 
-// Criar card de artigo
+// Criar card de artigo (versão simplificada)
 function createArticleCard(article) {
-    const card = document.createElement('article');
-    card.className = 'article-card';
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    
-    // Usar imagem placeholder se não existir
-    const imageUrl = article.image || 'https://via.placeholder.com/400x200/2563eb/ffffff?text=Áudio+Igreja';
-    
-    card.innerHTML = `
-        <img src="${imageUrl}" alt="${article.title}" class="article-image" onerror="this.src='https://via.placeholder.com/400x200/2563eb/ffffff?text=Áudio+Igreja'">
-        <div class="article-content">
-            <span class="article-category">${article.category}</span>
-            <h3 class="article-title">${article.title}</h3>
-            <p class="article-excerpt">${article.excerpt}</p>
-            <div class="article-meta">
-                <div class="article-date">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>${formatDate(article.date)}</span>
-                </div>
-                <div class="article-read-time">
-                    <i class="fas fa-clock"></i>
-                    <span>${article.readTime}</span>
-                </div>
-            </div>
-        </div>
-    `;
-
-    // Adicionar evento de clique
-    card.addEventListener('click', function() {
-        // Em produção, isso redirecionaria para a página do artigo
-        console.log(`Navegando para artigo: ${article.slug}`);
-        showArticlePreview(article);
-    });
-
-    // Animação de entrada
-    setTimeout(() => {
-        card.style.transition = 'all 0.6s ease-out';
-        card.style.opacity = '1';
-        card.style.transform = 'translateY(0)';
-    }, 50);
-
-    return card;
-}
-
-// Mostrar preview do artigo (placeholder para funcionalidade futura)
-function showArticlePreview(article) {
-    const modal = document.createElement('div');
-    modal.className = 'article-modal';
-    modal.innerHTML = `
-        <div class="modal-overlay">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>${article.title}</h2>
-                    <button class="modal-close">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Categoria:</strong> ${article.category}</p>
-                    <p><strong>Data:</strong> ${formatDate(article.date)}</p>
-                    <p><strong>Tempo de leitura:</strong> ${article.readTime}</p>
-                    <br>
-                    <p>${article.excerpt}</p>
-                    <br>
-                    <p><em>Este é um preview. O artigo completo será adicionado em breve!</em></p>
+    try {
+        const card = document.createElement('article');
+        card.className = 'article-card';
+        
+        // Usar sempre placeholder para evitar problemas de carregamento
+        const imageUrl = 'https://via.placeholder.com/400x200/2563eb/ffffff?text=Audio+Igreja';
+        
+        card.innerHTML = `
+            <img src="${imageUrl}" alt="${article.title}" class="article-image">
+            <div class="article-content">
+                <span class="article-category">${article.category}</span>
+                <h3 class="article-title">${article.title}</h3>
+                <p class="article-excerpt">${article.excerpt}</p>
+                <div class="article-meta">
+                    <div class="article-date">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>${formatDate(article.date)}</span>
+                    </div>
+                    <div class="article-read-time">
+                        <i class="fas fa-clock"></i>
+                        <span>${article.readTime}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 
-    // Adicionar estilos do modal
-    const modalStyles = `
-        <style>
-        .article-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 1rem;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .modal-header h2 {
-            margin: 0;
-            color: #1f2937;
-        }
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #6b7280;
-            padding: 0;
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-close:hover {
-            color: #1f2937;
-        }
-        .modal-body {
-            padding: 1.5rem;
-            line-height: 1.6;
-            color: #374151;
-        }
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        </style>
-    `;
+        // Adicionar evento de clique simplificado
+        card.addEventListener('click', function() {
+            console.log(`Clique no artigo: ${article.title}`);
+            alert(`Artigo: ${article.title}\n\nEste é um preview. O artigo completo será adicionado em breve!`);
+        });
 
-    document.head.insertAdjacentHTML('beforeend', modalStyles);
-    document.body.appendChild(modal);
+        return card;
 
-    // Fechar modal
-    const closeBtn = modal.querySelector('.modal-close');
-    const overlay = modal.querySelector('.modal-overlay');
-
-    closeBtn.addEventListener('click', () => {
-        document.body.removeChild(modal);
-    });
-
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-            document.body.removeChild(modal);
-        }
-    });
-
-    // Fechar com ESC
-    const handleEsc = (e) => {
-        if (e.key === 'Escape') {
-            document.body.removeChild(modal);
-            document.removeEventListener('keydown', handleEsc);
-        }
-    };
-    document.addEventListener('keydown', handleEsc);
+    } catch (error) {
+        console.error('Erro ao criar card:', error);
+        return null;
+    }
 }
 
 // Configurar botão "Carregar Mais"
@@ -368,7 +239,7 @@ function setupSmoothScrolling() {
             const targetElement = document.getElementById(targetId);
             
             if (targetElement) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
+                const headerHeight = document.querySelector('.header')?.offsetHeight || 80;
                 const targetPosition = targetElement.offsetTop - headerHeight - 20;
                 
                 window.scrollTo({
@@ -380,74 +251,72 @@ function setupSmoothScrolling() {
     });
 }
 
-// Configurar animações de entrada
+// Configurar animações de entrada (simplificado)
 function setupAnimations() {
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Observar elementos que devem animar
+    // Versão simplificada sem Intersection Observer para evitar problemas
     const elementsToAnimate = document.querySelectorAll('.section-header, .feature, .contact-content');
     elementsToAnimate.forEach(el => {
-        observer.observe(el);
+        el.classList.add('fade-in-up');
     });
 }
 
 // Função utilitária para formatar data
 function formatDate(dateString) {
-    const date = new Date(dateString);
-    const options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    };
-    return date.toLocaleDateString('pt-BR', options);
+    try {
+        const date = new Date(dateString);
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        return date.toLocaleDateString('pt-BR', options);
+    } catch (error) {
+        console.error('Erro ao formatar data:', error);
+        return dateString;
+    }
 }
 
 // Função para adicionar novos artigos (para uso futuro)
 function addNewArticle(articleData) {
-    BlogConfig.articles.unshift(articleData);
-    BlogConfig.totalArticles = BlogConfig.articles.length;
-    BlogConfig.currentPage = 1;
-    displayArticles();
-    updateLoadMoreButton();
+    try {
+        BlogConfig.articles.unshift(articleData);
+        BlogConfig.totalArticles = BlogConfig.articles.length;
+        BlogConfig.currentPage = 1;
+        displayArticles();
+        updateLoadMoreButton();
+    } catch (error) {
+        console.error('Erro ao adicionar artigo:', error);
+    }
 }
 
 // Função para buscar artigos (para uso futuro)
 function searchArticles(query) {
-    const filteredArticles = BlogConfig.articles.filter(article => 
-        article.title.toLowerCase().includes(query.toLowerCase()) ||
-        article.excerpt.toLowerCase().includes(query.toLowerCase()) ||
-        article.category.toLowerCase().includes(query.toLowerCase())
-    );
-    
-    // Temporariamente substituir artigos pelos resultados da busca
-    const originalArticles = [...BlogConfig.articles];
-    BlogConfig.articles = filteredArticles;
-    BlogConfig.totalArticles = filteredArticles.length;
-    BlogConfig.currentPage = 1;
-    
-    displayArticles();
-    updateLoadMoreButton();
-    
-    // Retornar função para restaurar artigos originais
-    return function restoreArticles() {
-        BlogConfig.articles = originalArticles;
-        BlogConfig.totalArticles = originalArticles.length;
+    try {
+        const filteredArticles = BlogConfig.articles.filter(article => 
+            article.title.toLowerCase().includes(query.toLowerCase()) ||
+            article.excerpt.toLowerCase().includes(query.toLowerCase()) ||
+            article.category.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        const originalArticles = [...BlogConfig.articles];
+        BlogConfig.articles = filteredArticles;
+        BlogConfig.totalArticles = filteredArticles.length;
         BlogConfig.currentPage = 1;
+        
         displayArticles();
         updateLoadMoreButton();
-    };
+        
+        return function restoreArticles() {
+            BlogConfig.articles = originalArticles;
+            BlogConfig.totalArticles = originalArticles.length;
+            BlogConfig.currentPage = 1;
+            displayArticles();
+            updateLoadMoreButton();
+        };
+    } catch (error) {
+        console.error('Erro na busca:', error);
+        return function() {};
+    }
 }
 
 // Exportar funções para uso global (se necessário)
