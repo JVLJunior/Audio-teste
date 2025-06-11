@@ -20,13 +20,13 @@ const sampleArticles = [
     },
     {
         id: 2,
-        title: "Como Configurar um Sistema de Som Básico",
-        excerpt: "Passo a passo para montar um sistema de áudio funcional e profissional para igrejas pequenas e médias.",
+        title: "Introdução ao Áudio Básico",
+        excerpt: "Aprenda o essencial sobre áudio do zero: microfones, mesas de som, equalização, retorno e muito mais com linguagem simples e direta.",
         category: "Tutorial",
-        date: "2024-06-08",
-        readTime: "12 min",
-        image: "", // Removido para usar placeholder
-        slug: "configurar-sistema-som-basico"
+        date: "2025-06-11",
+        readTime: "8 min",
+        image: "", // "images/introducao-audio-basico.jpg",
+        slug: "introducao-audio-basico"
     },
     {
         id: 3,
