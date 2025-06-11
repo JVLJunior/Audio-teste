@@ -163,8 +163,11 @@ function createArticleCard(article) {
         const card = document.createElement('article');
         card.className = 'article-card';
         
-        // Usar sempre placeholder para evitar problemas de carregamento
-        const imageUrl = 'https://via.placeholder.com/400x200/2563eb/ffffff?text=Audio+Igreja';
+        
+        const imageUrl = article.image && article.image.trim() !== ""
+            ? article.image
+            : 'https://via.placeholder.com/400x200/2563eb/ffffff?text=Audio+Igreja';
+
         
         card.innerHTML = `
             <img src="${imageUrl}" alt="${article.title}" class="article-image">
