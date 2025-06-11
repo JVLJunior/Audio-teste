@@ -323,9 +323,10 @@ body {
 
 .article-image {
     width: 100%;
-    height: auto;
-    max-height: 180px;
-    object-fit: cover;
+    height: 180px;              /* Altura fixa do espaço da imagem */
+    object-fit: contain;        /* Garante que a imagem inteira se encaixe */
+    background-color: #f3f4f6;  /*Cor de fundo neutra para bordas laterais */
+    padding: 0.5rem;            /* Pequeno respiro interno */
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
 }
